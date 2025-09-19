@@ -1,12 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link} from "react-router-dom";
 
 export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -18,15 +19,16 @@ export default function Register() {
       });
 
       alert("Registration successful! Please login.");
-      Navigate("/login");
+      navigate("/login");
     } catch (error) {
-      alert("Registration failed");
-      console.error(error);
+      setError("Registration Failed !");
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="w-full max-w-md bg-white-shadow p-6 rounded">
+        <div className="flex flex-col items-center w-full">
       <form
         onSubmit={handleRegister}
         className="bg-white p-6 rounded-2xl shadow-md w-80"
@@ -60,6 +62,16 @@ export default function Register() {
           Register
         </button>
       </form>
+      {error && <p className="text-red-500 mt-2">{error}</p>}
+
+        <p className="mt-6 text-sm text-center w-full">
+          Already have an account?{" "}
+          <Link to="/login" className="text-blue-600 hover:underline">
+            Login  
+          </Link>
+        </p>
+        </div>
+        </div>
     </div>
   );
 }

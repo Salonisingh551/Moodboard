@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 
 
@@ -32,6 +32,8 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="w-full max-w-md bg-white-shadow p-6 rounded">
+        <div className="flex flex-col items-center w-full">
       <form
         onSubmit={handleLogin}
         className="bg-white p-6 rounded-2xl shadow-md w-80"
@@ -59,6 +61,12 @@ export default function Login() {
           Login
         </button>
       </form>
+      <p className="mt-6 text-sm text-center w-full">
+        Already have an account?{""}
+        <Link to="/register" className="text-blue-600 hover:underline">SignUp</Link>
+      </p>
+      </div>
+      </div>
     </div>
   );
 }
