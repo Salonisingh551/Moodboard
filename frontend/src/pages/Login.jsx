@@ -24,7 +24,7 @@ export default function Login() {
       });
       login(res.data.token);
       alert("Login successful!");
-      navigate("/dashboard");
+      navigate("/home");
     } catch (err) {
       setError("Invalid Credentials");
     }
