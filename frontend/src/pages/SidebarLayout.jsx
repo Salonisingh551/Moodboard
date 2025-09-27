@@ -1,10 +1,11 @@
-// src/components/SidebarLayout.jsx
+import { useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import {useAuth} from "../context/AuthContext";
 
-export default function SidebarLayout() {
-  const { logout } = useAuth();
+export default function Layout() {
+  const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
+  const{logout} = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -14,43 +15,70 @@ export default function SidebarLayout() {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <aside className="w-64 bg-gray-800 text-white shadow-lg border-r fixed top-0 left-0 h-screen flex flex-col ">
+      <div
+        className={`${
+          collapsed ? "w-20" : "w-64"
+        } bg-gray-800 text-white shadow-lg border-r fixed top-0 left-0 h-screen flex flex-col justify-between transition-all duration-300`}
+      >
         <div>
-          <div className="p-6 text-2xl font-bold">Moodboard</div>
-          <nav className="flex flex-col space-y-4 px-6">
-            <Link to="/Home" className="!text-blue-300 hover:!text-blue-400">
-              Home
+          {/* Collapse button + App logo */}
+          <div className="flex items-center justify-between p-4 border-b relative">
+            <h2 className={`font-bold text-xl ${collapsed ? "hidden" : "block"}`}>
+              Moodboard
+            </h2>
+
+            {/* Small circular collapse button */}
+           
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="absolute -right-3 top-1/2 transform -translate-y-1/2 bg-white border border-gray-600 rounded-full w-8 h-8 flex items-center justify-center shadow hover:bg-gray-700 transition"
+          >
+          {collapsed ? "➡️" : "⬅️"}
+          </button>
+
+          </div>
+
+          {/* Navigation */}
+          <nav className="p-4 space-y-4">
+            <Link to="/Home" className="flex items-center gap-2 !text-blue-300 hover:!text-blue-400">
+              <span>🏠</span>
+              {!collapsed && <span>Home</span>}
             </Link>
-            <Link to="/dashboard" className="!text-blue-300 hover:!text-blue-400">
-              Dashboard
+            <Link to="/dashboard" className="flex items-center gap-2 !text-blue-300 hover:!text-blue-400">
+              <span>📓</span>
+              {!collapsed && <span>Dashboard</span>}
             </Link>
-            <Link to="/mood-ai" className="!text-blue-300 hover:!text-blue-400">
-              Mood Graph (AI)
+            <Link to="/mood-ai" className="flex items-center gap-2 !text-blue-300 hover:!text-blue-400">
+              <span>📊</span>
+              {!collapsed && <span>Graph</span>}
             </Link>
-            <Link to="/tips" className="!text-blue-300 hover:!text-blue-400">
-              Tips & Tricks
+            <Link to="/tips" className="flex items-center gap-2 !text-blue-300 hover:!text-blue-400">
+              <span>💡</span>
+              {!collapsed && <span>Tips</span>}
             </Link>
-            <Link to="/faq" className="!text-blue-300 hover:!text-blue-400">
-              FAQs
+            <Link to="/faq" className="flex items-center gap-2 !text-blue-300 hover:!text-blue-400">
+              <span>❓</span>
+              {!collapsed && <span>FAQ</span>}
             </Link>
           </nav>
         </div>
 
-       
-        <div className="p-6 mt-auto">
+        {/* Logout button */}
+        <div className="p-4 ">
           <button
             onClick={handleLogout}
-            className="w-full bg-red-500 hover:bg-red-600 py-2 rounded"
+            className="flex items-center gap-2 w-full  bg-red-500 text-white-500 hover:bg-red-700"
           >
-            Logout
+            <span>⏏️</span>
+            {!collapsed && <span>Logout</span>}
           </button>
         </div>
-      </aside>
+      </div>
 
       {/* Main Content */}
-      <main className="flex-1 ml-64 bg-gray-100 p-6">
-        <Outlet /> {/* This will render the current page */}
-      </main>
+      <div className={`${collapsed ? "ml-20" : "ml-64"} flex-1  transition-all duration-300`}>
+        <Outlet />
+      </div>
     </div>
   );
 }
